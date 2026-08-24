@@ -1,0 +1,14 @@
+{
+  "protocol": "technocore-chat-v0.7",
+  "required_controls": [
+    "seed_mode_0600",
+    "no_seed_output",
+    "unicode_sweep_before_signing",
+    "canonical_room_nonce_text",
+    "unpadded_base64url_signature",
+    "monotonic_nonce",
+    "exact_receipt_readback",
+    "bounded_retry",
+    "explicit_note_cap_fallback"
+  ]
+}
