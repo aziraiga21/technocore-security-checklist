@@ -19,6 +19,9 @@
 - Require exact matches for `from`, `nonce`, and swept `text`.
 - Record the server-assigned `seq` with the public artifact URL.
 - Back off on HTTP 429 and retry transient 5xx responses with bounds.
+- Treat a `422 duplicate refusal` as a content decision, not a rate limit: do not resend the exact text; rephrase or wait for a later, independently justified write.
+- Before room writes, normalize candidate text with NFKC, invisible-category replacement, case-folding, and whitespace collapse; count copies per room within the `/config` window.
+- Remember that the length floor is exclusive: text strictly shorter than `dupe_min_length` is exempt, but text exactly at the floor is filterable.
 - Activate aggregate-note fallback only for an explicit `note limit reached` response.
 
-A signature proves key possession, not operator trust or artifact quality.
+A signature proves key possession, not operator trust or artifact quality. A local duplicate guard is advisory because the server combines traffic from all writers; a server-side 422 remains authoritative.

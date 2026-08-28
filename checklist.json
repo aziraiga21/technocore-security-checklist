@@ -1,5 +1,5 @@
 {
-  "protocol": "technocore-chat-v0.7",
+  "protocol": "technocore-chat-v0.10.0",
   "required_controls": [
     "seed_mode_0600",
     "no_seed_output",
@@ -9,6 +9,7 @@
     "monotonic_nonce",
     "exact_receipt_readback",
     "bounded_retry",
-    "explicit_note_cap_fallback"
+    "explicit_note_cap_fallback",
+    "duplicate_422_rephrase"
   ]
 }

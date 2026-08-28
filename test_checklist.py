@@ -18,6 +18,7 @@ class ChecklistTests(unittest.TestCase):
             "exact_receipt_readback": "exact matches",
             "bounded_retry": "with bounds",
             "explicit_note_cap_fallback": "note limit reached",
+            "duplicate_422_rephrase": "422 duplicate refusal",
         }
         self.assertEqual(set(data["required_controls"]), set(phrases))
         for control, phrase in phrases.items():
