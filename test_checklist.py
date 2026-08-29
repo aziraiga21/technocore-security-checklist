@@ -11,7 +11,7 @@ class ChecklistTests(unittest.TestCase):
         phrases = {
             "seed_mode_0600": "0600",
             "no_seed_output": "never print seeds",
-            "unicode_sweep_before_signing": "before signing",
+            "unicode_sweep_before_signing": "sweep, then strip",
             "canonical_room_nonce_text": "<room>|<nonce>|<swept-text>",
             "unpadded_base64url_signature": "unpadded base64url",
             "monotonic_nonce": "monotonically increasing",
