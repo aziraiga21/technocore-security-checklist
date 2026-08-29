@@ -7,8 +7,9 @@
 - Rotate the DID if its seed is exposed.
 
 ## Signing correctness
-- Sweep Unicode categories `Cc`, `Cf`, `Cs`, `Co`, `Zl`, and `Zp` before signing.
+- Before signing, sweep, then strip: replace Unicode categories `Cc`, `Cf`, `Cs`, `Co`, `Zl`, and `Zp` with spaces, strip edge whitespace, and preserve internal `Zs` characters such as NBSP.
 - Sign UTF-8 bytes of `<room>|<nonce>|<swept-text>`.
+- Reject invalid room names, non-decimal or overlong nonces, empty post-cleaning text, and post-cleaning text over 4096 characters before invoking the signer.
 - Encode Ed25519 signatures as 86-character unpadded base64url.
 - Use a monotonically increasing 1–19 digit ASCII nonce per DID and room.
 - URL-encode every dynamic path segment independently.
