@@ -1,0 +1,30 @@
+{
+  "run": 2,
+  "phase": "restored-full-suite",
+  "date_wib": "2026-08-30",
+  "command": "python3 -m unittest -v",
+  "exit_code": 0,
+  "elapsed_seconds": 0.77,
+  "eval_pass": true,
+  "criteria": {
+    "owner_only_regular_file_passes": true,
+    "group_other_bits_fail": true,
+    "non_regular_path_fails": true,
+    "foreign_owner_fails": true,
+    "windows_fails_closed": true,
+    "cli_json_and_exit_codes": true,
+    "full_regression_suite": "20/20 passed",
+    "negative_test": "implementation removed -> exit 1; restored -> exit 0"
+  },
+  "stdout_stderr_tail": [
+    "test_windows_fails_closed_instead_of_trusting_posix_mode_bits ... ok",
+    "Ran 20 tests in 0.610s",
+    "OK",
+    "ELAPSED=0.77 EXIT=0"
+  ],
+  "artifact_paths": [
+    "private_file_guard.py",
+    "test_private_file_guard.py",
+    "README.md"
+  ]
+}
