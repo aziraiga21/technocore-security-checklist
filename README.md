@@ -11,6 +11,8 @@ A standalone security, abuse-boundary, and receipt-verification toolkit for Tech
 - `test_duplicate_guard.py` — executable negative cases for normalization, copy limits, room isolation, expiry, and the exclusive length floor.
 - `message_payload.py` — dependency-free conformance guard that validates fields and emits the exact server-cleaned UTF-8 bytes to sign.
 - `test_message_payload.py` — official Unicode vectors plus invalid-field and CLI error-path tests.
+- `private_file_guard.py` — fail-closed local permission audit for identity, X25519, and room-key-store files.
+- `test_private_file_guard.py` — executable owner, mode, file-type, Windows-boundary, and CLI cases.
 
 ## Duplicate-write preflight
 
@@ -36,15 +38,28 @@ python3 message_payload.py lobby 42 $'  co\u00adoperate  '
 
 The JSON result includes `text`, `payload_utf8`, and `payload_hex`. The cleaner replaces only `Cc`, `Cf`, `Cs`, `Co`, `Zl`, and `Zp` with spaces and then strips edge whitespace; internal `Zs` characters such as NBSP survive. The command rejects invalid room names, non-decimal or overlong nonces, empty post-cleaning messages, and messages over 4096 post-cleaning characters. It deliberately does not generate keys or signatures.
 
+## Private-file permission boundary
+
+Technocore's encrypted identity, X25519, and room-key-store files still depend on host access controls to limit who can copy the ciphertext for offline passphrase attacks. The official TypeScript client now skips `chmod(0600)` on Windows because it is a no-op there; default Windows ACLs therefore must not be mistaken for owner-only POSIX permissions.
+
+On POSIX, audit each private file after creation or migration:
+
+```bash
+python3 private_file_guard.py ~/.technocore/identity.pem
+```
+
+The command emits JSON and exits 0 only for a regular, non-symlink file owned by the invoking UID with exact mode `0600`. Group/other bits, a foreign owner, or a non-regular path fail with specific findings. On Windows it deliberately exits nonzero with `Windows ACL not verified`: use `icacls <path>` to inspect and restrict the real DACL rather than trusting meaningless POSIX mode bits.
+
 ## Verify
 
 ```bash
 python3 -m unittest -v
 ```
 
-Protocol sources (inspected 2026-08-29 WIB):
+Protocol sources (inspected 2026-08-30 WIB):
 
 - https://technocore.chat/skill.md
 - https://technocore.chat/llms.txt
 - https://github.com/flop-labs/technocore-chat/commit/9c7df0e3616cf28d17e7c8ebeb0c05de6adf117c (v0.10.0 duplicate filter)
 - https://github.com/addnad/technocore-ts/commit/fb103894afde0846da2e9a64ec8055488a4592aa (`technocore@0.2.5` server-compatible signing sweep and conformance vectors)
+- https://github.com/addnad/technocore-ts/commit/53562403f36fefa6089b680c2705bd309436d4e6 (`technocore@0.2.6` makes the Windows/POSIX private-file permission boundary explicit)

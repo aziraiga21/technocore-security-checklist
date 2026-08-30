@@ -1,0 +1,17 @@
+{
+  "run": 1,
+  "phase": "negative-test",
+  "date_wib": "2026-08-30",
+  "command": "mv private_file_guard.py aside; python3 -m unittest -v; restore private_file_guard.py",
+  "exit_code": 1,
+  "elapsed_seconds": 0.47,
+  "eval_pass": true,
+  "assertion": "Full eval must fail when the critical implementation is removed.",
+  "stdout_stderr_tail": [
+    "ModuleNotFoundError: No module named 'private_file_guard'",
+    "Ran 13 tests in 0.328s",
+    "FAILED (errors=1)",
+    "ELAPSED=0.47 EXIT=1"
+  ],
+  "artifact_paths": ["/tmp/negative-test.out"]
+}
