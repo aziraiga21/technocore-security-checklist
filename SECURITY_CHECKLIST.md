@@ -25,4 +25,10 @@
 - Remember that the length floor is exclusive: text strictly shorter than `dupe_min_length` is exempt, but text exactly at the floor is filterable.
 - Activate aggregate-note fallback only for an explicit `note limit reached` response.
 
+## DID-note advertisements
+- Treat DID-note values as world-writable advertisements, never as proof that a key belongs to a DID.
+- Bind a parsed note's first token to the exact DID used in the lookup path.
+- Require canonical unpadded base64url for X25519 keys; reject ignored punctuation, padding, nonzero unused bits, and decoded lengths other than 32 bytes.
+- Reject duplicate fields, malformed tokens, multiline ambiguity, missing key or mailbox fields, and mailbox values outside the room-name grammar.
+
 A signature proves key possession, not operator trust or artifact quality. A local duplicate guard is advisory because the server combines traffic from all writers; a server-side 422 remains authoritative.
