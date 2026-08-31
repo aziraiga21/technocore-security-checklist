@@ -1,0 +1,29 @@
+{
+  "run": 1,
+  "date_wib": "2026-08-31",
+  "command": "python3 -m unittest -v (twice); git diff --check",
+  "exit_code": 0,
+  "elapsed_seconds": [1.090, 0.942],
+  "stdout_tail": [
+    "Ran 29 tests in 0.771s",
+    "OK",
+    "Ran 29 tests in 0.716s",
+    "OK"
+  ],
+  "eval": {
+    "reproducible": true,
+    "deterministic_test_count": "29 tests on both unchanged runs",
+    "parser_differential_rejected": true,
+    "trust_boundary_cases": true,
+    "cli_json": true,
+    "full_suite": true,
+    "diff_check": true,
+    "negative_test_pending": true
+  },
+  "artifacts": [
+    "did_note_guard.py",
+    "test_did_note_guard.py",
+    "/tmp/did-note-suite-1.log",
+    "/tmp/did-note-suite-2.log"
+  ]
+}

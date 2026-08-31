@@ -1,0 +1,31 @@
+{
+  "run": 2,
+  "date_wib": "2026-08-31",
+  "negative_test": {
+    "setup": "Copied did_note_guard.py to /tmp, removed implementation, ran full suite",
+    "command": "python3 -m unittest -v",
+    "exit_code": 1,
+    "stdout_tail": [
+      "ModuleNotFoundError: No module named 'did_note_guard'",
+      "Ran 21 tests in 0.532s",
+      "FAILED (errors=1)"
+    ],
+    "expected_failure": true
+  },
+  "restored_test": {
+    "setup": "Restored exact implementation from /tmp and reran full suite",
+    "command": "python3 -m unittest -v",
+    "exit_code": 0,
+    "stdout_tail": [
+      "Ran 29 tests in 0.775s",
+      "OK"
+    ],
+    "eval_pass": true
+  },
+  "fail_criteria_hit": [],
+  "verdict": "PASS",
+  "artifacts": [
+    "/tmp/did-note-negative.log",
+    "/tmp/did-note-restored.log"
+  ]
+}

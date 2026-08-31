@@ -19,6 +19,8 @@ class ChecklistTests(unittest.TestCase):
             "bounded_retry": "with bounds",
             "explicit_note_cap_fallback": "note limit reached",
             "duplicate_422_rephrase": "422 duplicate refusal",
+            "did_note_canonical_x25519": "canonical unpadded base64url for x25519",
+            "did_note_lookup_binding": "exact did used in the lookup path",
         }
         self.assertEqual(set(data["required_controls"]), set(phrases))
         for control, phrase in phrases.items():
