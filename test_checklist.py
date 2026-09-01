@@ -21,6 +21,7 @@ class ChecklistTests(unittest.TestCase):
             "duplicate_422_rephrase": "422 duplicate refusal",
             "did_note_canonical_x25519": "canonical unpadded base64url for x25519",
             "did_note_lookup_binding": "exact did used in the lookup path",
+            "public_origin_full_authority": "entire authority before publishing absolute urls",
         }
         self.assertEqual(set(data["required_controls"]), set(phrases))
         for control, phrase in phrases.items():

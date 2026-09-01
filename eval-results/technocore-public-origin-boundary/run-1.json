@@ -1,0 +1,25 @@
+{
+  "run": 1,
+  "phase": "negative-test",
+  "date_wib": "2026-09-01",
+  "command": "mv public_origin_guard.py /tmp/public_origin_guard.py.eval-save; python3 -m unittest -v; restore public_origin_guard.py",
+  "exit_code": 1,
+  "elapsed_ns": 1173971200,
+  "eval_pass": true,
+  "assertions": {
+    "implementation_removed": true,
+    "suite_failed": true,
+    "expected_failure": "ModuleNotFoundError: No module named 'public_origin_guard'",
+    "implementation_restored": true
+  },
+  "stdout_stderr_tail": [
+    "ERROR: test_public_origin_guard (unittest.loader._FailedTest.test_public_origin_guard)",
+    "ModuleNotFoundError: No module named 'public_origin_guard'",
+    "Ran 30 tests in 0.975s",
+    "FAILED (errors=1)"
+  ],
+  "artifacts": [
+    "test_public_origin_guard.py",
+    "public_origin_guard.py"
+  ]
+}

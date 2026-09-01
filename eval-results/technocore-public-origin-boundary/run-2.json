@@ -1,0 +1,37 @@
+{
+  "run": 2,
+  "phase": "restored-pass",
+  "date_wib": "2026-09-01",
+  "command": "python3 -m unittest -v (twice), then valid and trailing-newline CLI probes",
+  "exit_code": 0,
+  "elapsed_ns": {
+    "suite_1": 1430943600,
+    "suite_2": 1354648000
+  },
+  "eval_pass": true,
+  "assertions": {
+    "suite_1": "33 tests passed",
+    "suite_2": "33 tests passed",
+    "deterministic_test_count_and_exit": true,
+    "valid_cli": "{\"ok\":true,\"origin\":\"https://example.com\"}",
+    "valid_cli_exit": 0,
+    "trailing_newline_cli": "{\"findings\":[\"authority must contain a valid DNS host or IP address\"],\"ok\":false}",
+    "trailing_newline_cli_exit": 1,
+    "traceback_on_refusal": false
+  },
+  "stdout_stderr_tail": [
+    "test_accepts_and_canonicalizes_supported_authorities ... ok",
+    "test_accepts_canonical_host_but_rejects_official_trailing_newline_abuse ... ok",
+    "test_cli_emits_deterministic_json_and_fails_closed_without_traceback ... ok",
+    "test_rejects_authority_injection_and_ambiguous_network_names ... ok",
+    "Ran 33 tests in 1.162s",
+    "OK"
+  ],
+  "artifacts": [
+    "public_origin_guard.py",
+    "test_public_origin_guard.py",
+    "README.md",
+    "SECURITY_CHECKLIST.md",
+    "checklist.json"
+  ]
+}

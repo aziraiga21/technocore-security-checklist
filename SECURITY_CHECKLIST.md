@@ -31,4 +31,9 @@
 - Require canonical unpadded base64url for X25519 keys; reject ignored punctuation, padding, nonzero unused bits, and decoded lengths other than 32 bytes.
 - Reject duplicate fields, malformed tokens, multiline ambiguity, missing key or mailbox fields, and mailbox values outside the room-name grammar.
 
+## Published public origins
+- Validate the entire authority before publishing absolute URLs from a reverse-proxy `Host` value or operator setting; never rely on a prefix regex match.
+- Allow only HTTP(S), canonical DNS/IPv4 or bracketed IPv6 authorities, and optional ports from 1 through 65535.
+- Reject control characters, userinfo, paths, queries, fragments, malformed IP literals, ambiguous numeric IPv4 spellings, and trailing data instead of repairing them.
+
 A signature proves key possession, not operator trust or artifact quality. A local duplicate guard is advisory because the server combines traffic from all writers; a server-side 422 remains authoritative.
