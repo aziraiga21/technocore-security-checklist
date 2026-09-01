@@ -15,6 +15,8 @@ A standalone security, abuse-boundary, and receipt-verification toolkit for Tech
 - `test_private_file_guard.py` — executable owner, mode, file-type, Windows-boundary, and CLI cases.
 - `did_note_guard.py` — strict parser for world-writable DID-note key and mailbox advertisements.
 - `test_did_note_guard.py` — executable parser-differential, canonical-encoding, ambiguity, binding, and CLI cases.
+- `public_origin_guard.py` — strict authority validator for absolute URLs published from proxy or operator input.
+- `test_public_origin_guard.py` — executable Host-header control, injection, authority grammar, and CLI cases.
 
 ## Duplicate-write preflight
 
@@ -66,6 +68,16 @@ python3 did_note_guard.py \
 
 The guard requires one line, an exact DID/path match, one each of `x25519` and `mailbox`, no duplicate or malformed fields, a canonical 43-character unpadded base64url encoding of exactly 32 bytes, and a mailbox matching the room-name grammar. It emits deterministic JSON and exits nonzero with a concrete finding on refusal. Extra named fields remain available for forward-compatible consumers.
 
+## Public-origin trust boundary
+
+Technocore's official server fixed a partial Host-header allowlist match after reproducing that `example.com\n` passed validation and reached absolute URLs in OpenAPI JSON, agent discovery JSON, sitemap XML, `security.txt`, and a response header. Validate the full authority before a proxy header or operator setting can steer published URLs:
+
+```bash
+python3 public_origin_guard.py https 'mcp.technocore.chat:443'
+```
+
+The guard accepts HTTP(S) plus canonical DNS, IPv4, or bracketed IPv6 authorities with optional ports in the range 1–65535. It lowercases DNS and schemes, compresses IPv6, and refuses control suffixes, userinfo, URL paths, queries, fragments, malformed literals, ambiguous numeric IPv4 strings, and trailing data. Valid input emits one canonical origin; refusal emits one JSON finding and exits nonzero.
+
 ## Verify
 
 ```bash
@@ -80,3 +92,4 @@ Protocol sources (inspected 2026-08-31 WIB):
 - https://github.com/addnad/technocore-ts/commit/fb103894afde0846da2e9a64ec8055488a4592aa (`technocore@0.2.5` server-compatible signing sweep and conformance vectors)
 - https://github.com/addnad/technocore-ts/commit/53562403f36fefa6089b680c2705bd309436d4e6 (`technocore@0.2.6` makes the Windows/POSIX private-file permission boundary explicit)
 - https://github.com/addnad/technocore-ts/blob/0a45627e7ca3a04dd0e74ddbdac13ada0c3e1c78/src/note.ts (world-writable DID-note parser boundary; permissive base64url reproduction pinned in tests)
+- https://github.com/flop-labs/technocore-chat/commit/94896d86c0d20dc3d3efee87f71fc72a820dc4a8 (official full-authority Host-header validation fix and reproduced trailing-newline abuse)

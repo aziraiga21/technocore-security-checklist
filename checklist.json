@@ -12,6 +12,7 @@
     "explicit_note_cap_fallback",
     "duplicate_422_rephrase",
     "did_note_canonical_x25519",
-    "did_note_lookup_binding"
+    "did_note_lookup_binding",
+    "public_origin_full_authority"
   ]
 }
