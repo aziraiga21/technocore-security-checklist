@@ -17,7 +17,8 @@
     "valid_cli_exit": 0,
     "trailing_newline_cli": "{\"findings\":[\"authority must contain a valid DNS host or IP address\"],\"ok\":false}",
     "trailing_newline_cli_exit": 1,
-    "traceback_on_refusal": false
+    "traceback_on_refusal": false,
+    "fresh_checkout": "b6a36710b4e8671e53570523ccefce1ec80401d8: 33 tests passed in 1.194s"
   },
   "stdout_stderr_tail": [
     "test_accepts_and_canonicalizes_supported_authorities ... ok",

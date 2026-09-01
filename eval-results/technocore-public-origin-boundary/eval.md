@@ -11,7 +11,7 @@ Boundary: a reverse-proxy `Host` value or operator-provided public origin is unt
 ## Pass criteria (ALL must be true)
 
 1. **Reproducibility**
-   - [ ] `python3 -m unittest -v` passes from a fresh checkout.
+   - [x] `python3 -m unittest -v` passes from a fresh checkout.
    - [x] Two unchanged full-suite runs produce the same test count and exit code.
 
 2. **Demonstrability**
