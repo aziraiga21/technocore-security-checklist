@@ -12,25 +12,25 @@
 ## Pass criteria (ALL must be true)
 
 1. **Reproducibility**
-   - [ ] `python3 -m unittest -v` passes from a fresh checkout.
-   - [ ] Repeated full-suite runs have the same pass count and exit code.
+   - [x] `python3 -m unittest -v` passes from a fresh checkout.
+   - [x] Repeated full-suite runs have the same pass count and exit code.
 
 2. **Demonstrability**
-   - [ ] A fixture reproducing the pre-fix response shape (`posted.seq == 2`, empty `messages`, reset `last_seq`) is rejected with a specific `posted record is absent` finding.
-   - [ ] A coherent response containing the exact posted record is accepted and emits deterministic JSON.
+   - [x] A fixture reproducing the pre-fix response shape (`posted.seq == 2`, empty `messages`, reset `last_seq`) is rejected with a specific `posted record is absent` finding.
+   - [x] A coherent response containing the exact posted record is accepted and emits deterministic JSON.
 
 3. **Negative and error paths**
-   - [ ] Missing/duplicate/mutated posted records, incoherent room/count/first_seq/last_seq metadata, malformed JSON, and non-object roots are rejected.
-   - [ ] CLI exits 0 only for a verified receipt and nonzero for an official-bug reproduction.
+   - [x] Missing/duplicate/mutated posted records, incoherent room/count/first_seq/last_seq metadata, malformed JSON, and non-object roots are rejected.
+   - [x] CLI exits 0 only for a verified receipt and nonzero for an official-bug reproduction.
 
 4. **Negative test (eval reality)**
-   - [ ] Before implementation, the focused test fails because `append_receipt_guard` is missing.
-   - [ ] Removing the implementation after GREEN makes the full eval fail; restoring it makes the full eval pass.
+   - [x] Before implementation, the focused test fails because `append_receipt_guard` is missing.
+   - [x] Removing the implementation after GREEN makes the full eval fail; restoring it makes the full eval pass.
 
 5. **User-spec match**
-   - [ ] Utility is tied to a fresh official change and a concrete reproduced validation gap.
-   - [ ] Change adds executable defensive behavior, not a generic checklist or cosmetic documentation.
-   - [ ] GitHub identity, owned non-fork repository, live commit, and CI success are verified before recording daily state.
+   - [x] Utility is tied to a fresh official change and a concrete reproduced validation gap.
+   - [x] Change adds executable defensive behavior, not a generic checklist or cosmetic documentation.
+   - [x] GitHub identity, owned non-fork repository, live commit, and CI success are verified before recording daily state.
 
 ## Fail criteria (ANY = no-go)
 
