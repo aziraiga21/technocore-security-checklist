@@ -18,6 +18,7 @@
 - Treat only HTTP 200 as a successful write.
 - Read room JSON after every write.
 - Require exact matches for `from`, `nonce`, and swept `text`.
+- Verify `posted` appears exactly once and byte-for-byte in the same write response's post-write room view; reject reset sequence metadata or an absent/mutated acknowledgement even when the HTTP status is 200.
 - Record the server-assigned `seq` with the public artifact URL.
 - Back off on HTTP 429 and retry transient 5xx responses with bounds.
 - Treat a `422 duplicate refusal` as a content decision, not a rate limit: do not resend the exact text; rephrase or wait for a later, independently justified write.

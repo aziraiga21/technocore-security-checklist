@@ -1,0 +1,67 @@
+{
+  "task": "technocore-append-receipt-boundary",
+  "run": 2,
+  "date_wib": "2026-09-02",
+  "evaluated_code_sha": "04c293d4c156c181e3ccb24e9bac85dd151b7f04",
+  "evaluated_code_url": "https://github.com/aziraiga21/technocore-security-checklist/commit/04c293d4c156c181e3ccb24e9bac85dd151b7f04",
+  "identity": {
+    "gh_login": "aziraiga21",
+    "commit_author_login": "aziraiga21",
+    "commit_committer_login": "aziraiga21",
+    "repository": "aziraiga21/technocore-security-checklist",
+    "fork": false
+  },
+  "negative_test": {
+    "snapshot": "/tmp/append_receipt_guard.py.green",
+    "change_disabled": "removed append_receipt_guard.py",
+    "command": "python3 -m unittest -v",
+    "exit_code": 1,
+    "elapsed_ms": 2203,
+    "stdout_tail": "ModuleNotFoundError: No module named 'append_receipt_guard'\n\nRan 34 tests in 1.691s\n\nFAILED (errors=1)",
+    "eval_failed_as_required": true
+  },
+  "restoration": {
+    "change_restored": "copied the saved implementation back unchanged",
+    "command": "python3 -m unittest -v",
+    "exit_code": 0,
+    "elapsed_ms": 2794,
+    "stdout_tail": "Ran 38 tests in 2.265s\n\nOK",
+    "eval_passed_as_required": true
+  },
+  "fresh_checkout": {
+    "command": "git clone --branch feat/verify-append-receipts-aziraiga --single-branch https://github.com/aziraiga21/technocore-security-checklist.git /tmp/aziraiga21-append-fresh && python3 -m unittest -v",
+    "sha": "04c293d4c156c181e3ccb24e9bac85dd151b7f04",
+    "exit_code": 0,
+    "elapsed_ms": 1878,
+    "tests": 38,
+    "stdout_tail": "Ran 38 tests in 1.628s\n\nOK"
+  },
+  "ci": [
+    {
+      "event": "push",
+      "run_id": 33589312202,
+      "url": "https://github.com/aziraiga21/technocore-security-checklist/actions/runs/33589312202",
+      "head_sha": "04c293d4c156c181e3ccb24e9bac85dd151b7f04",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "event": "pull_request",
+      "run_id": 33589318047,
+      "url": "https://github.com/aziraiga21/technocore-security-checklist/actions/runs/33589318047",
+      "head_sha": "04c293d4c156c181e3ccb24e9bac85dd151b7f04",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "criteria": {
+    "reproducibility": "pass: 38/38 in repeated development runs and fresh checkout",
+    "demonstrability": "pass: official loss-shaped fixture is rejected with posted record is absent",
+    "negative_and_error_paths": "pass: absence, duplicate, mutation, schema, JSON, sequence, count, room, and generation cases reject",
+    "negative_test": "pass: removing critical implementation fails; restoration passes",
+    "user_spec_match": "pass: fresh official change, concrete validation gap, executable defensive utility, owned non-fork repo, correct identity, live code commit, successful CI"
+  },
+  "fail_criteria_hit": [],
+  "value_statement": "Reject an HTTP 200 write acknowledgement when the same response proves the acknowledged record is absent, duplicated, mutated, or contradicted by post-write room metadata.",
+  "eval_pass": true
+}
