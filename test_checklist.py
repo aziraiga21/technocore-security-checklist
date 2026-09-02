@@ -16,6 +16,7 @@ class ChecklistTests(unittest.TestCase):
             "unpadded_base64url_signature": "unpadded base64url",
             "monotonic_nonce": "monotonically increasing",
             "exact_receipt_readback": "exact matches",
+            "append_receipt_postwrite_view": "same write response's post-write room view",
             "bounded_retry": "with bounds",
             "explicit_note_cap_fallback": "note limit reached",
             "duplicate_422_rephrase": "422 duplicate refusal",

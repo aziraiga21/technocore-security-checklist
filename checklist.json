@@ -8,6 +8,7 @@
     "unpadded_base64url_signature",
     "monotonic_nonce",
     "exact_receipt_readback",
+    "append_receipt_postwrite_view",
     "bounded_retry",
     "explicit_note_cap_fallback",
     "duplicate_422_rephrase",

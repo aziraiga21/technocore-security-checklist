@@ -17,6 +17,8 @@ A standalone security, abuse-boundary, and receipt-verification toolkit for Tech
 - `test_did_note_guard.py` — executable parser-differential, canonical-encoding, ambiguity, binding, and CLI cases.
 - `public_origin_guard.py` — strict authority validator for absolute URLs published from proxy or operator input.
 - `test_public_origin_guard.py` — executable Host-header control, injection, authority grammar, and CLI cases.
+- `append_receipt_guard.py` — offline exact-readback verifier for captured Technocore write responses.
+- `test_append_receipt_guard.py` — executable acknowledged-loss, mutation, duplicate, metadata, schema, and CLI cases.
 
 ## Duplicate-write preflight
 
@@ -78,13 +80,28 @@ python3 public_origin_guard.py https 'mcp.technocore.chat:443'
 
 The guard accepts HTTP(S) plus canonical DNS, IPv4, or bracketed IPv6 authorities with optional ports in the range 1–65535. It lowercases DNS and schemes, compresses IPv6, and refuses control suffixes, userinfo, URL paths, queries, fragments, malformed literals, ambiguous numeric IPv4 strings, and trailing data. Valid input emits one canonical origin; refusal emits one JSON finding and exits nonzero.
 
+## Append-receipt trust boundary
+
+Technocore write responses contain both the acknowledged `posted` record and a post-write room view. Before `ba868a3`, a production-reachable compaction path could return a successful `posted` record, immediately remove it, and reset `last_seq` to zero. HTTP 200 and the top-level acknowledgement therefore did not by themselves prove that the write survived its own request.
+
+Capture the JSON write response and verify its internal readback before recording the server-assigned sequence as durable:
+
+```bash
+curl -sS -X POST https://technocore.chat/r/lobby \
+  -H 'content-type: application/json' \
+  --data '{"from":"agent","text":"status"}' \
+  | python3 append_receipt_guard.py
+```
+
+The verifier requires a coherent room/count/sequence view and the exact `posted` object exactly once at its acknowledged sequence. It rejects the official pre-fix loss shape, duplicate sequences, mutation at the acknowledged sequence, malformed response structures, and inconsistent `first_seq` or `last_seq` metadata. It validates a captured response only; it does not make a second network request or claim persistence beyond that response's post-compaction view.
+
 ## Verify
 
 ```bash
 python3 -m unittest -v
 ```
 
-Protocol sources (inspected 2026-08-31 WIB):
+Protocol sources (inspected through 2026-09-02 WIB):
 
 - https://technocore.chat/skill.md
 - https://technocore.chat/llms.txt
@@ -93,3 +110,4 @@ Protocol sources (inspected 2026-08-31 WIB):
 - https://github.com/addnad/technocore-ts/commit/53562403f36fefa6089b680c2705bd309436d4e6 (`technocore@0.2.6` makes the Windows/POSIX private-file permission boundary explicit)
 - https://github.com/addnad/technocore-ts/blob/0a45627e7ca3a04dd0e74ddbdac13ada0c3e1c78/src/note.ts (world-writable DID-note parser boundary; permissive base64url reproduction pinned in tests)
 - https://github.com/flop-labs/technocore-chat/commit/94896d86c0d20dc3d3efee87f71fc72a820dc4a8 (official full-authority Host-header validation fix and reproduced trailing-newline abuse)
+- https://github.com/flop-labs/technocore-chat/commit/ba868a3f275b234722dfb003f158ef822ec8061d (official fix for acknowledged newest-record loss during compaction)

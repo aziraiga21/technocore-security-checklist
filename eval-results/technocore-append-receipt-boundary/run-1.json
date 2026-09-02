@@ -1,0 +1,63 @@
+{
+  "task": "technocore-append-receipt-boundary",
+  "run": 1,
+  "date_wib": "2026-09-02",
+  "official_source": {
+    "commit": "ba868a3f275b234722dfb003f158ef822ec8061d",
+    "url": "https://github.com/flop-labs/technocore-chat/commit/ba868a3f275b234722dfb003f158ef822ec8061d",
+    "reproduced_gap": "append returned posted.seq=2 while immediate compaction emptied messages and reset last_seq to 0"
+  },
+  "tdd": {
+    "initial_red": {
+      "command": "python3 -m unittest -v test_append_receipt_guard.AppendReceiptGuardTests.test_accepts_exact_readback_but_rejects_official_compaction_loss_shape",
+      "exit_code": 1,
+      "elapsed_ms": 270,
+      "expected_failure": "ModuleNotFoundError: No module named 'append_receipt_guard'"
+    },
+    "vertical_cycles": [
+      "exact readback versus official compaction-loss shape: RED missing module, then GREEN",
+      "duplicate and mutated acknowledged sequence: RED duplicate accepted, then GREEN",
+      "malformed root/record structures: RED leaked TypeError/KeyError/AttributeError, then GREEN ReceiptError",
+      "room-view metadata coherence: RED all six mutations accepted, then GREEN",
+      "CLI stdin and malformed JSON: RED empty output, then GREEN deterministic JSON",
+      "machine control documentation: RED missing append_receipt_postwrite_view, then GREEN"
+    ]
+  },
+  "development_verification": [
+    {
+      "command": "PYTHONWARNINGS=error python3 -m unittest -v",
+      "exit_code": 0,
+      "elapsed_ms": 2474,
+      "tests": 38
+    },
+    {
+      "command": "PYTHONWARNINGS=error python3 -m unittest -v",
+      "exit_code": 0,
+      "elapsed_ms": 2783,
+      "tests": 38,
+      "stdout_tail": "Ran 38 tests in 2.306s\n\nOK"
+    },
+    {
+      "command": "python3 -m py_compile append_receipt_guard.py test_append_receipt_guard.py && git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "criteria": {
+    "fresh_official_source": "pass",
+    "concrete_reproduction": "pass",
+    "deterministic_positive_case": "pass",
+    "negative_and_error_paths": "pass",
+    "full_suite_reproducible": "pass",
+    "negative_test_restoration": "pending run-2",
+    "fresh_checkout": "pending run-2",
+    "live_commit_and_ci": "pending run-2"
+  },
+  "artifacts": [
+    "append_receipt_guard.py",
+    "test_append_receipt_guard.py",
+    "README.md",
+    "SECURITY_CHECKLIST.md",
+    "checklist.json"
+  ],
+  "eval_pass": false
+}
