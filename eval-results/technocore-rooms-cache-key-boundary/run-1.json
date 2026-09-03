@@ -1,0 +1,78 @@
+{
+  "run": 1,
+  "wib_timestamp": "2026-09-03T10:57:59+07:00",
+  "domain": "build",
+  "official_source": "https://github.com/flop-labs/technocore-chat/commit/01c49fbe85b1bd05deb066b7fcae2a58d4eef053",
+  "commands": [
+    "python3 -m unittest -v test_rooms_cache_key_guard.RoomsCacheKeyGuardTests.test_collapses_attacker_query_churn_onto_the_reply_space",
+    "python3 -m unittest -v test_rooms_cache_key_guard.RoomsCacheKeyGuardTests.test_rejects_requests_outside_the_shareable_grammar",
+    "python3 -m unittest -v test_rooms_cache_key_guard.RoomsCacheKeyGuardTests.test_cli_emits_a_machine_decision_and_fails_closed",
+    "python3 -m unittest -v test_rooms_cache_key_guard.RoomsCacheKeyGuardTests.test_preserves_only_reply_selecting_format_and_normalizes_the_origin",
+    "python3 -m unittest -v",
+    "mv rooms_cache_key_guard.py /tmp/rooms_cache_key_guard.py.saved && python3 -m unittest -v; restore; python3 -m unittest -v"
+  ],
+  "tdd_red": [
+    {
+      "slice": "query-churn equivalence classes",
+      "exit_code": 1,
+      "evidence": "ModuleNotFoundError: No module named 'rooms_cache_key_guard'"
+    },
+    {
+      "slice": "fail-closed request grammar",
+      "exit_code": 1,
+      "evidence": "13 invalid request cases were accepted before validation was implemented"
+    },
+    {
+      "slice": "machine-readable CLI",
+      "exit_code": 1,
+      "evidence": "JSONDecodeError because the module emitted no decision"
+    },
+    {
+      "slice": "reply-selecting format and default-port normalization",
+      "exit_code": 1,
+      "evidence": "expected https://technocore.chat/rooms?format=json, got a distinct :443 key"
+    },
+    {
+      "slice": "bounded query parsing",
+      "exit_code": 1,
+      "evidence": "101 ignored fields were accepted before max_num_fields was enforced"
+    }
+  ],
+  "green": {
+    "command": "python3 -m unittest -v",
+    "exit_code": 0,
+    "runs": [
+      {"tests": 42, "test_seconds": 3.838, "elapsed_seconds": 5.09},
+      {"tests": 42, "test_seconds": 3.709, "elapsed_seconds": 4.59}
+    ],
+    "stdout_tail": "Ran 42 tests; OK"
+  },
+  "negative_test": {
+    "change_disabled": "rooms_cache_key_guard.py moved out of the checkout",
+    "command": "python3 -m unittest -v",
+    "exit_code": 1,
+    "stdout_tail": "ModuleNotFoundError: No module named 'rooms_cache_key_guard'; Ran 39 tests; FAILED (errors=1)",
+    "restored_exit_code": 0,
+    "restored_stdout_tail": "Ran 42 tests in 3.588s; OK"
+  },
+  "demonstration": {
+    "command": "python3 rooms_cache_key_guard.py 'https://technocore.chat/rooms?limit=999999999&ignored=1&format=json' --max-limit 200",
+    "exit_code": 0,
+    "stdout": "{\"cache_key\":\"https://technocore.chat/rooms?format=json&limit=200\",\"ok\":true,\"shareable\":true}"
+  },
+  "criteria": {
+    "reproducibility": "pass",
+    "demonstrability": "pass",
+    "negative_and_error_paths": "pass",
+    "negative_test": "pass",
+    "user_spec_match": "pending live GitHub and CI verification"
+  },
+  "artifacts": [
+    "rooms_cache_key_guard.py",
+    "test_rooms_cache_key_guard.py",
+    "README.md",
+    "SECURITY_CHECKLIST.md",
+    "eval-results/technocore-rooms-cache-key-boundary/eval.md"
+  ],
+  "verdict": "development pass; live verification pending"
+}

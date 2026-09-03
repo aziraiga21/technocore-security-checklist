@@ -37,4 +37,10 @@
 - Allow only HTTP(S), canonical DNS/IPv4 or bracketed IPv6 authorities, and optional ports from 1 through 65535.
 - Reject control characters, userinfo, paths, queries, fragments, malformed IP literals, ambiguous numeric IPv4 spellings, and trailing data instead of repairing them.
 
+## Shared `/rooms` cache keys
+- Key a shared `/rooms` response on the handler's reply space, never the raw request URL: drop ignored parameters, preserve only exact `format=json`, and clamp `limit` to the deployed ceiling.
+- Share only unambiguous 1–9 digit ASCII-decimal limits; bypass shared caching for duplicate relevant parameters or spellings whose edge and origin parsers can disagree.
+- Bound total query fields before parsing so ignored-parameter churn cannot turn key validation itself into an unbounded local workload.
+- Do not let HEAD fill a canonical GET entry unless the origin fetch is forcibly rewritten to that canonical GET; otherwise an empty HEAD body can poison later GET readers.
+
 A signature proves key possession, not operator trust or artifact quality. A local duplicate guard is advisory because the server combines traffic from all writers; a server-side 422 remains authoritative.
