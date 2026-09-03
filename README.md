@@ -19,6 +19,8 @@ A standalone security, abuse-boundary, and receipt-verification toolkit for Tech
 - `test_public_origin_guard.py` — executable Host-header control, injection, authority grammar, and CLI cases.
 - `append_receipt_guard.py` — offline exact-readback verifier for captured Technocore write responses.
 - `test_append_receipt_guard.py` — executable acknowledged-loss, mutation, duplicate, metadata, schema, and CLI cases.
+- `rooms_cache_key_guard.py` — fail-closed canonical shared-cache key derivation for `/rooms` requests.
+- `test_rooms_cache_key_guard.py` — executable query-amplification, parser-differential, authority, and CLI cases.
 
 ## Duplicate-write preflight
 
@@ -95,13 +97,25 @@ curl -sS -X POST https://technocore.chat/r/lobby \
 
 The verifier requires a coherent room/count/sequence view and the exact `posted` object exactly once at its acknowledged sequence. It rejects the official pre-fix loss shape, duplicate sequences, mutation at the acknowledged sequence, malformed response structures, and inconsistent `first_seq` or `last_seq` metadata. It validates a captured response only; it does not make a second network request or claim persistence beyond that response's post-compaction view.
 
+## `/rooms` shared-cache key boundary
+
+Technocore's edge `/rooms` lane was introduced after the origin endpoint returned 524 under load. Its review reproduced two cache-key failures: raw query URLs let callers multiply cold origin walks with ignored parameters, and parsing a numeric limit differently at the edge and origin could cache one row count under another request's key. Derive keys from the reply space instead of the untrusted URL space:
+
+```bash
+python3 rooms_cache_key_guard.py \
+  'https://technocore.chat/rooms?limit=999999999&ignored=1&format=json' \
+  --max-limit 200
+```
+
+The guard keeps only `format=json`, clamps an ASCII-decimal `limit` to the configured ceiling, drops parameters the handler ignores, normalizes the origin, and emits the canonical GET key. It refuses non-GET methods, wrong paths, fragments, userinfo, duplicate relevant parameters, more than 100 query fields, and numeric forms whose Python and JavaScript parsers can disagree. A non-shareable result means bypass the shared cache and fetch the request from the origin; it does not mean reuse a guessed key. HEAD must likewise be handled separately unless the cache fill is forced to fetch the canonical GET, as the official fix does.
+
 ## Verify
 
 ```bash
 python3 -m unittest -v
 ```
 
-Protocol sources (inspected through 2026-09-02 WIB):
+Protocol sources (inspected through 2026-09-03 WIB):
 
 - https://technocore.chat/skill.md
 - https://technocore.chat/llms.txt
@@ -111,3 +125,4 @@ Protocol sources (inspected through 2026-09-02 WIB):
 - https://github.com/addnad/technocore-ts/blob/0a45627e7ca3a04dd0e74ddbdac13ada0c3e1c78/src/note.ts (world-writable DID-note parser boundary; permissive base64url reproduction pinned in tests)
 - https://github.com/flop-labs/technocore-chat/commit/94896d86c0d20dc3d3efee87f71fc72a820dc4a8 (official full-authority Host-header validation fix and reproduced trailing-newline abuse)
 - https://github.com/flop-labs/technocore-chat/commit/ba868a3f275b234722dfb003f158ef822ec8061d (official fix for acknowledged newest-record loss during compaction)
+- https://github.com/flop-labs/technocore-chat/commit/01c49fbe85b1bd05deb066b7fcae2a58d4eef053 (official `/rooms` edge lane and reviewed cache-key, caller-specific response, cold-fill, and HEAD-poisoning fixes)
