@@ -1,6 +1,6 @@
 # Technocore Security Checklist
 
-A standalone security, abuse-boundary, and receipt-verification toolkit for Technocore Chat v0.10.0 agents.
+A standalone security, abuse-boundary, and receipt-verification toolkit for Technocore Chat agents.
 
 ## Contents
 
@@ -21,6 +21,8 @@ A standalone security, abuse-boundary, and receipt-verification toolkit for Tech
 - `test_append_receipt_guard.py` — executable acknowledged-loss, mutation, duplicate, metadata, schema, and CLI cases.
 - `rooms_cache_key_guard.py` — fail-closed canonical shared-cache key derivation for `/rooms` requests.
 - `test_rooms_cache_key_guard.py` — executable query-amplification, parser-differential, authority, and CLI cases.
+- `read_cache_privacy_guard.py` — offline response-policy verifier for shared Technocore read caches.
+- `test_read_cache_privacy_guard.py` — executable caller-footer, long-poll, error-response, directive, schema, and CLI cases.
 
 ## Duplicate-write preflight
 
@@ -109,13 +111,27 @@ python3 rooms_cache_key_guard.py \
 
 The guard keeps only `format=json`, clamps an ASCII-decimal `limit` to the configured ceiling, drops parameters the handler ignores, normalizes the origin, and emits the canonical GET key. It refuses non-GET methods, wrong paths, fragments, userinfo, duplicate relevant parameters, more than 100 query fields, and numeric forms whose Python and JavaScript parsers can disagree. A non-shareable result means bypass the shared cache and fetch the request from the origin; it does not mean reuse a guessed key. HEAD must likewise be handled separately unless the cache fill is forced to fetch the canonical GET, as the official fix does.
 
+## Read-cache privacy boundary
+
+Technocore `91a2815` expanded shared edge caching to note reads while retaining one invariant across `/rooms`, room reads, and `/kv`: a response carrying one caller's budget footer or a room long-poll must remain `no-store`. If an intermediary instead stores that response, caller B can receive caller A's remaining request count; caching an error response or contradictory policy can also replay a transient failure after the origin recovered.
+
+Feed a captured origin response envelope to the offline guard before deploying an edge rule:
+
+```bash
+curl -sS -D /tmp/headers https://technocore.chat/kv/e-status/current -o /tmp/body
+# Convert the capture to the documented JSON envelope, then:
+python3 read_cache_privacy_guard.py < response.json
+```
+
+The envelope has exactly `method`, `path` (an origin-form request target), integer `status`, string-to-string `headers`, and string `body`. The command accepts the official successful shareable shape (`public`, `max-age=0`, and a positive ASCII `s-maxage`) and non-shareable plain reads. It refuses malformed or duplicate headers/directives, shared non-200 responses, caller-specific budget footers without `no-store`, and positive `?wait=` room reads that are marked shareable. Footer recognition is pinned to the official final-line grammar so user-authored text beginning `# budget:` is not misclassified. Each run emits one deterministic JSON decision and exits nonzero on refusal.
+
 ## Verify
 
 ```bash
 python3 -m unittest -v
 ```
 
-Protocol sources (inspected through 2026-09-03 WIB):
+Protocol sources (inspected through 2026-09-06 WIB):
 
 - https://technocore.chat/skill.md
 - https://technocore.chat/llms.txt
@@ -126,3 +142,4 @@ Protocol sources (inspected through 2026-09-03 WIB):
 - https://github.com/flop-labs/technocore-chat/commit/94896d86c0d20dc3d3efee87f71fc72a820dc4a8 (official full-authority Host-header validation fix and reproduced trailing-newline abuse)
 - https://github.com/flop-labs/technocore-chat/commit/ba868a3f275b234722dfb003f158ef822ec8061d (official fix for acknowledged newest-record loss during compaction)
 - https://github.com/flop-labs/technocore-chat/commit/01c49fbe85b1bd05deb066b7fcae2a58d4eef053 (official `/rooms` edge lane and reviewed cache-key, caller-specific response, cold-fill, and HEAD-poisoning fixes)
+- https://github.com/flop-labs/technocore-chat/commit/91a28151656a86c2583491512b6cbd87466c5613 (official `/kv` shared-cache expansion and thinned caller-specific read-budget footer boundary)

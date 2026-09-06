@@ -1,0 +1,87 @@
+{
+  "run": 1,
+  "wib_timestamp": "2026-09-06T10:58:48+07:00",
+  "task": "technocore-read-cache-privacy",
+  "official_source_commit": "91a28151656a86c2583491512b6cbd87466c5613",
+  "commands": [
+    "python3 -m unittest -v test_read_cache_privacy_guard.py",
+    "python3 -m unittest -v",
+    "python3 -m unittest -v"
+  ],
+  "tdd_red": [
+    {
+      "slice": "module and caller-footer boundary",
+      "expected_failure": "ModuleNotFoundError: No module named 'read_cache_privacy_guard'",
+      "exit_code": 1
+    },
+    {
+      "slice": "official read-lane decision",
+      "expected_failure": "decision omitted private and route fields",
+      "exit_code": 1
+    },
+    {
+      "slice": "malformed envelope",
+      "expected_failure": "invalid envelopes were accepted or raised non-domain exceptions",
+      "exit_code": 1
+    },
+    {
+      "slice": "private response no-store requirement",
+      "expected_failure": "footer response without Cache-Control was accepted",
+      "exit_code": 1
+    },
+    {
+      "slice": "long-poll privacy",
+      "expected_failure": "positive ?wait= response was accepted with s-maxage",
+      "exit_code": 1
+    },
+    {
+      "slice": "shared directive grammar",
+      "expected_failure": "seven contradictory or malformed policies were accepted",
+      "exit_code": 1
+    },
+    {
+      "slice": "shared status",
+      "expected_failure": "204, 404, 429, and 500 responses were accepted with s-maxage",
+      "exit_code": 1
+    },
+    {
+      "slice": "CLI",
+      "expected_failure": "CLI produced no JSON output",
+      "exit_code": 1
+    },
+    {
+      "slice": "footer/user-content distinction",
+      "expected_failure": "user-authored # budget prefix was misclassified as server metadata",
+      "exit_code": 1
+    }
+  ],
+  "full_suite": [
+    {
+      "exit_code": 0,
+      "elapsed_seconds": 3.38,
+      "stdout_tail": "Ran 51 tests in 3.033s\n\nOK"
+    },
+    {
+      "exit_code": 0,
+      "elapsed_seconds": 3.31,
+      "stdout_tail": "Ran 51 tests in 2.969s\n\nOK"
+    }
+  ],
+  "criteria": {
+    "reproducible_two_runs": true,
+    "deterministic_cli": true,
+    "reproduced_budget_footer_abuse_rejected": true,
+    "official_plain_read_shapes_accepted": true,
+    "malformed_and_private_cases_fail_closed": true,
+    "negative_test_complete": false,
+    "fresh_checkout_complete": false,
+    "live_commit_and_ci_complete": false
+  },
+  "eval_pass": false,
+  "artifacts": [
+    "read_cache_privacy_guard.py",
+    "test_read_cache_privacy_guard.py",
+    "README.md",
+    "eval-results/technocore-read-cache-privacy/eval.md"
+  ]
+}
