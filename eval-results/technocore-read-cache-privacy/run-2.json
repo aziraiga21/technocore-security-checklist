@@ -1,0 +1,56 @@
+{
+  "run": 2,
+  "wib_timestamp": "2026-09-06T11:00:44+07:00",
+  "task": "technocore-read-cache-privacy",
+  "implementation_commit": "773e2336ef0fd5439edbb52b46c3330d1c2ec149",
+  "commands": [
+    "mv read_cache_privacy_guard.py /tmp/read_cache_privacy_guard.py.aziraiga21-negative && python3 -m unittest -v; restore; python3 -m unittest -v",
+    "gh pr checks 8 --watch --interval 10"
+  ],
+  "negative_test": {
+    "change_disabled": "read_cache_privacy_guard.py removed",
+    "exit_code": 1,
+    "stdout_tail": "ModuleNotFoundError: No module named 'read_cache_privacy_guard'\nRan 43 tests in 2.520s\nFAILED (errors=1)",
+    "eval_failed_as_required": true
+  },
+  "restored_test": {
+    "exit_code": 0,
+    "stdout_tail": "Ran 51 tests in 2.923s\nOK",
+    "eval_passed_as_required": true
+  },
+  "ci": [
+    {
+      "event": "push",
+      "run_id": 34010378001,
+      "head_sha": "773e2336ef0fd5439edbb52b46c3330d1c2ec149",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aziraiga21/technocore-security-checklist/actions/runs/34010378001"
+    },
+    {
+      "event": "pull_request",
+      "run_id": 34010380304,
+      "head_sha": "773e2336ef0fd5439edbb52b46c3330d1c2ec149",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/aziraiga21/technocore-security-checklist/actions/runs/34010380304"
+    }
+  ],
+  "criteria": {
+    "reproducibility": true,
+    "demonstrability": true,
+    "negative_test": true,
+    "user_spec_match": true,
+    "full_suite": true,
+    "implementation_ci": true
+  },
+  "fail_criteria_hit": [],
+  "eval_pass": true,
+  "artifacts": [
+    "read_cache_privacy_guard.py",
+    "test_read_cache_privacy_guard.py",
+    "README.md",
+    "eval-results/technocore-read-cache-privacy/eval.md",
+    "eval-results/technocore-read-cache-privacy/run-1.json"
+  ]
+}
